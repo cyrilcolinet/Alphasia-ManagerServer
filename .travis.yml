@@ -1,2 +1,4 @@
 dist: Debian 8 (Jessie)
 language: Java
+jdk:
+  - oraclejdk8
