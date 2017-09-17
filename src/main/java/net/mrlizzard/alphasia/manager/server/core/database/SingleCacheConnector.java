@@ -14,9 +14,10 @@ public class SingleCacheConnector extends CachingConnector {
     private final String        cacheIp;
     protected JedisPool         cachePool;
 
-    public SingleCacheConnector(String cacheIp, String password) {
+    public SingleCacheConnector(String cacheIp, String password, int database) {
         this.cacheIp = cacheIp;
         this.password = password;
+        this.database = database;
 
         AlphaManagerServer.log(Level.INFO, "Starting redis (single) caching connection.");
 
@@ -48,12 +49,14 @@ public class SingleCacheConnector extends CachingConnector {
         int cachePort = (cacheParts.length > 1) ? Integer.decode(cacheParts[1]) : 6379;
 
         if (password == null || password.length() == 0) {
-            this.cachePool = new JedisPool(config, cacheParts[0], cachePort, 5000);
+            AlphaManagerServer.log(Level.INFO, "Be careful, redis connection not secured. Data can be compromised.");
+            this.cachePool = new JedisPool(config, cacheParts[0], cachePort, 5000, null, database);
         } else {
-            this.cachePool = new JedisPool(config, cacheParts[0], cachePort, 5000, password);
+            AlphaManagerServer.log(Level.INFO, "Good job, your connection is secured, but... SSL is missing.");
+            this.cachePool = new JedisPool(config, cacheParts[0], cachePort, 5000, password, database);
         }
 
-        AlphaManagerServer.log(Level.INFO, "Connection initialized.");
+        AlphaManagerServer.log(Level.INFO, "Connection initialized on database number " + database + ".");
 
         this.commandsSubscriber = new MainSubscriber();
 

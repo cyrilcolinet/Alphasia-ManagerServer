@@ -12,6 +12,7 @@ import redis.clients.jedis.Jedis;
 public abstract class CachingConnector {
 
     protected String                password;
+    protected int                   database;
     protected MainSubscriber        commandsSubscriber;
     protected SubscribingThread     thread;
 

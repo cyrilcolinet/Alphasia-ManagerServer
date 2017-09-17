@@ -162,8 +162,8 @@ public class AlphaManagerServer {
      */
     @SuppressWarnings("unchecked")
     private void databaseConnection() {
-        Map<String, String> conf = ((Map<String, String>) coreConfiguration.get("cache"));
-        cacheConnector = new SingleCacheConnector(conf.get("hostname"), conf.get("auth"));
+        Map<String, Object> conf = ((Map<String, Object>) coreConfiguration.get("cache"));
+        cacheConnector = new SingleCacheConnector(((String) conf.get("hostname")), ((String) conf.get("auth")), ((int) conf.get("database")));
         publisher = new Publisher(cacheConnector);
         tasksExecutor = new TasksExecutor();
         alphaManagerServerNetwork = new AlphaManagerServerNetwork(this);
